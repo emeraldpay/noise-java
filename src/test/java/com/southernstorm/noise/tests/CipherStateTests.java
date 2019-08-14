@@ -22,18 +22,17 @@
 
 package com.southernstorm.noise.tests;
 
-import static org.junit.Assert.*;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.ShortBufferException;
 
-import org.junit.Test;
-
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.Noise;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Perform tests on the cipher algorithms used by Noise.

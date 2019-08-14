@@ -22,15 +22,14 @@
 
 package com.southernstorm.noise.tests;
 
-import static org.junit.Assert.*;
-
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.junit.Test;
-
 import com.southernstorm.noise.protocol.Noise;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Perform tests on the hash algorithms used by Noise.
