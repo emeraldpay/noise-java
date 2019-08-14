@@ -23,6 +23,7 @@
 package com.southernstorm.noise.protocol;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -64,13 +65,8 @@ class SymmetricState implements Destroyable {
 		prev_h = new byte [hashLength];
 		
 		byte[] protocolNameBytes;
-		try {
-			protocolNameBytes = protocolName.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// If UTF-8 is not supported, then we are definitely in trouble!
-			throw new UnsupportedOperationException("UTF-8 encoding is not supported");
-		}
-		
+		protocolNameBytes = protocolName.getBytes(StandardCharsets.UTF_8);
+
 		if (protocolNameBytes.length <= hashLength) {
 			System.arraycopy(protocolNameBytes, 0, h, 0, protocolNameBytes.length);
 			Arrays.fill(h, protocolNameBytes.length, h.length, (byte)0);

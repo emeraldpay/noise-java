@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
 
 import com.southernstorm.noise.crypto.Blake2bMessageDigest;
@@ -45,7 +46,7 @@ public final class Noise {
 	 */
 	public static final int MAX_PACKET_LEN = 65535;
 	
-	private static SecureRandom random = new SecureRandom();
+	private static final SecureRandom random = new SecureRandom();
 	
 	/**
 	 * Generates random data using the system random number generator.
@@ -146,43 +147,44 @@ public final class Noise {
 		// use the fallback implementations in this library instead.
 		// The only algorithm that is required to be implemented by a
 		// JDK is "SHA-256", although "SHA-512" is fairly common as well.
-		if (name.equals("SHA256")) {
-			if (forceFallbacks)
-				return new SHA256MessageDigest();
-			try {
-				return MessageDigest.getInstance("SHA-256");
-			} catch (NoSuchAlgorithmException e) {
-				return new SHA256MessageDigest();
-			}
-		} else if (name.equals("SHA512")) {
-			if (forceFallbacks)
-				return new SHA512MessageDigest();
-			try {
-				return MessageDigest.getInstance("SHA-512");
-			} catch (NoSuchAlgorithmException e) {
-				return new SHA512MessageDigest();
-			}
-		} else if (name.equals("BLAKE2b")) {
-			// Bouncy Castle registers the BLAKE2b variant we
-			// want under the name "BLAKE2B-512".
-			if (forceFallbacks)
-				return new Blake2bMessageDigest();
-			try {
-				return MessageDigest.getInstance("BLAKE2B-512");
-			} catch (NoSuchAlgorithmException e) {
-				return new Blake2bMessageDigest();
-			}
-		} else if (name.equals("BLAKE2s")) {
-			// Bouncy Castle doesn't currently (June 2016) have an
-			// implementation of BLAKE2s, but look for the most
-			// obvious provider name in case one is added in the future.
-			if (forceFallbacks)
-				return new Blake2sMessageDigest();
-			try {
-				return MessageDigest.getInstance("BLAKE2S-256");
-			} catch (NoSuchAlgorithmException e) {
-				return new Blake2sMessageDigest();
-			}
+		switch (name) {
+			case "SHA256":
+				if (forceFallbacks)
+					return new SHA256MessageDigest();
+				try {
+					return MessageDigest.getInstance("SHA-256");
+				} catch (NoSuchAlgorithmException e) {
+					return new SHA256MessageDigest();
+				}
+			case "SHA512":
+				if (forceFallbacks)
+					return new SHA512MessageDigest();
+				try {
+					return MessageDigest.getInstance("SHA-512");
+				} catch (NoSuchAlgorithmException e) {
+					return new SHA512MessageDigest();
+				}
+			case "BLAKE2b":
+				// Bouncy Castle registers the BLAKE2b variant we
+				// want under the name "BLAKE2B-512".
+				if (forceFallbacks)
+					return new Blake2bMessageDigest();
+				try {
+					return MessageDigest.getInstance("BLAKE2B-512");
+				} catch (NoSuchAlgorithmException e) {
+					return new Blake2bMessageDigest();
+				}
+			case "BLAKE2s":
+				// Bouncy Castle doesn't currently (June 2016) have an
+				// implementation of BLAKE2s, but look for the most
+				// obvious provider name in case one is added in the future.
+				if (forceFallbacks)
+					return new Blake2sMessageDigest();
+				try {
+					return MessageDigest.getInstance("BLAKE2S-256");
+				} catch (NoSuchAlgorithmException e) {
+					return new Blake2sMessageDigest();
+				}
 		}
 		throw new NoSuchAlgorithmException("Unknown Noise hash algorithm name: " + name);
 	}
@@ -220,20 +222,8 @@ public final class Noise {
 	 * Throws an instance of AEADBadTagException.
 	 * 
 	 * @throws BadPaddingException The AEAD exception.
-	 * 
-	 * If the underlying JDK does not have the AEADBadTagException
-	 * class, then this function will instead throw an instance of
-	 * the superclass BadPaddingException.
 	 */
-	static void throwBadTagException() throws BadPaddingException
-	{
-		try {
-			Class<?> c = Class.forName("javax.crypto.AEADBadTagException");
-			throw (BadPaddingException)(c.newInstance());
-		} catch (ClassNotFoundException e) {
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
-		}
-		throw new BadPaddingException();
+	static void throwBadTagException() throws BadPaddingException {
+		throw new AEADBadTagException();
 	}
 }

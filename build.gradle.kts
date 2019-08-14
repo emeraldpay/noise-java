@@ -8,6 +8,10 @@ plugins {
     id("io.freefair.javadoc-links") version "3.8.4"
 }
 
+repositories {
+    jcenter()
+}
+
 group = "com.southernstorm"
 version = "1.0"
 
