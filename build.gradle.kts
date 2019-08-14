@@ -1,11 +1,11 @@
 plugins {
-    // Apply the java-library plugin to add support for Java Library
     `java-library`
-    id("org.javamodularity.moduleplugin") version "1.5.0"
-}
+    `maven-publish`
 
-repositories {
-    jcenter()
+    // Support for the Java 9+ module system, that lets you hide packages.
+    id("org.javamodularity.moduleplugin") version "1.5.0"
+    // Make JavaDocs link back to the main Java docs.
+    id("io.freefair.javadoc-links") version "3.8.4"
 }
 
 group = "com.southernstorm"
