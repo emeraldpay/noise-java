@@ -6,4 +6,5 @@
  */
 module com.southernstorm.noise {
     exports com.southernstorm.noise.protocol;
+    // The c.s.n.crypto package is for internal use only.
 }

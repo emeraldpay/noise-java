@@ -1,36 +1,20 @@
+R3 Noise Protocol for Java
+==========================
 
-Noise-Java Library
-==================
+This library is a fork of Rhys Weatherley's Noise-Java library, but modernised to benefit from
+newer Java versions. As such it offers the features in the base Noise spec. It doesn't implement
+Noise Pipes, NoiseLingoSocket or other newer extensions.
+ 
+Differences from [the upstream project](https://github.com/rweather/noise-java) include:
 
-Noise-Java is a plain Java implementation of the
-[Noise Protocol](http://noiseprotocol.org), intended as a
-reference implementation.  The code is distributed under the
-terms of the MIT license.
-
-This library is written in plain Java, making use of the Java Cryptography
-Extension (JCE) to provide cryptographic primitives and infrastructure.
-When a primitive is not supported by the platform's JDK, Noise-Java provides
-a fallback implementation in plain Java.
-
-The following algorithms are commonly available in standard JDK's and
-Noise-Java will try to use them if present:
-
- * SHA-256
- * SHA-512
- * AES/CTR/NoPadding
-
-Some JDK installations restrict the use of 256-bit AES keys.  You may need to
-install the "Unlimited Strength Policy Files" for your JDK to get around this
-restriction.  Alternatively, the plain Java fallback implementation of AESGCM
-in Noise-Java does not have any such restrictions.
-
-If you have better implementations of the cryptographic primitives
-available, you can modify the createDH(), createCipher(), and
-createHash() functions in the "Noise" class to integrate your versions.
-
-The [package documentation](http://rweather.github.com/noise-java/index.html)
-contains more information on the classes in the Noise-Java library.
-
-For more information on this library, to report bugs, to contribute,
-or to suggest improvements, please contact the author Rhys Weatherley via
-[email](mailto:rhys.weatherley@gmail.com).
+* Uses Gradle for the build and JavaDocs.
+* Uses the Java Platform Module System, so can be used as a modular JAR.
+* Can only use the JDK's native AES/GCM support. The fallbacks have been removed. This is because
+  for users on modern Java the native AES/GCM support is better: it's hardware accelerated using
+  AES-NI, and removing emulations and fallback logic makes the library smaller and easier to 
+  review. The small size and easy auditability of Noise protocols is one of their primary benefits.
+* Updated to modern Java language constructs and fixed various static analysis warnings. Fleshed out
+  a few JavaDocs.
+  
+As a consequence of these changes, this version may be unsuitable for pre-Lollipop Android versions. 
+The original might be better if you need to support those cases.
