@@ -199,7 +199,7 @@ class AESGCMCipherState implements CipherState {
             return length;
         }
         if (length < 16)
-            Noise.throwBadTagException();
+            throw new AEADBadTagException();
         int dataLen = length - 16;
         if (dataLen > space)
             throw new ShortBufferException();

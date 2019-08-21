@@ -206,13 +206,4 @@ public final class Noise {
 		System.arraycopy(data, offset, copy, 0, length);
 		return copy;
 	}
-	
-	/**
-	 * Throws an instance of AEADBadTagException.
-	 * 
-	 * @throws BadPaddingException The AEAD exception.
-	 */
-	static void throwBadTagException() throws BadPaddingException {
-		throw new AEADBadTagException();
-	}
 }

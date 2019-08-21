@@ -24,6 +24,7 @@ package com.southernstorm.noise.protocol;
 
 import java.util.Arrays;
 
+import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.ShortBufferException;
 
@@ -260,7 +261,7 @@ class ChaChaPolyCipherState implements CipherState {
 			return length;
 		}
 		if (length < 16)
-			Noise.throwBadTagException();
+            throw new AEADBadTagException();
 		int dataLen = length - 16;
 		if (dataLen > space)
 			throw new ShortBufferException();
@@ -271,7 +272,7 @@ class ChaChaPolyCipherState implements CipherState {
 		for (int index = 0; index < 16; ++index)
 			temp |= (polyKey[index] ^ ciphertext[ciphertextOffset + dataLen + index]);
 		if ((temp & 0xFF) != 0)
-			Noise.throwBadTagException();
+            throw new AEADBadTagException();
 		encrypt(ciphertext, ciphertextOffset, plaintext, plaintextOffset, dataLen);
 		return dataLen;
 	}
