@@ -26,6 +26,7 @@ import com.southernstorm.json.JsonReader;
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.ShortBufferException;
@@ -40,77 +41,72 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class VectorTests {
 
-	private int total;
-	private int failed;
-	private int skipped;
-	
-	public VectorTests()
-	{
-		total = 0;
-		failed = 0;
-		skipped = 0;
-	}
+    private int total;
+    private int failed;
+    private int skipped;
 
-	/**
-	 * Information about a handshake or transport message.
-	 */
-	private static class TestMessage
-	{
-		public byte[] payload;
-		public byte[] ciphertext;
-	}
+	public VectorTests() {
+        total = 0;
+        failed = 0;
+        skipped = 0;
+    }
 
-	/**
-	 * Information about a Noise test vector that was parsed from a JSON stream.
-	 */
-	private class TestVector
-	{
-		public String name;
-		public String pattern;
-		public String dh;
-		public String hybrid;
-		public String cipher;
-		public String hash;
-		public String fallback_pattern;
-		public byte[] init_prologue;
-		public byte[] init_ephemeral;
-		public byte[] init_hybrid;
-		public byte[] init_static;
-		public byte[] init_remote_static;
-		public byte[] init_psk;
-		public byte[] init_ssk;
-		public byte[] resp_prologue;
-		public byte[] resp_ephemeral;
-		public byte[] resp_hybrid;
-		public byte[] resp_static;
-		public byte[] resp_remote_static;
-		public byte[] resp_psk;
-		public byte[] resp_ssk;
-		public byte[] handshake_hash;
-		public boolean failure_expected;
-		public boolean fallback_expected;
-		public TestMessage[] messages;
-		
-		public void addMessage(TestMessage msg)
-		{
-			TestMessage[] newMessages;
-			if (messages != null) {
-				newMessages = new TestMessage [messages.length + 1];
-				System.arraycopy(messages, 0, newMessages, 0, messages.length);
-				newMessages[messages.length] = msg;
-			} else {
-				newMessages = new TestMessage [1];
-				newMessages[0] = msg;
-			}
-			messages = newMessages;
-		}
-	}
+    /**
+     * Information about a handshake or transport message.
+     */
+    private static class TestMessage {
+        public byte[] payload;
+        public byte[] ciphertext;
+    }
 
-	private void assertSubArrayEquals(String msg, byte[] expected, byte[] actual)
-	{
-		for (int index = 0; index < expected.length; ++index)
-			assertEquals(expected[index], actual[index], msg + "[" + index + "]");
-	}
+    /**
+     * Information about a Noise test vector that was parsed from a JSON stream.
+     */
+    private class TestVector {
+        public String name;
+        public String pattern;
+        public String dh;
+        public String hybrid;
+        public String cipher;
+        public String hash;
+        public String fallback_pattern;
+        public byte[] init_prologue;
+        public byte[] init_ephemeral;
+        public byte[] init_hybrid;
+        public byte[] init_static;
+        public byte[] init_remote_static;
+        public byte[] init_psk;
+        public byte[] init_ssk;
+        public byte[] resp_prologue;
+        public byte[] resp_ephemeral;
+        public byte[] resp_hybrid;
+        public byte[] resp_static;
+        public byte[] resp_remote_static;
+        public byte[] resp_psk;
+        public byte[] resp_ssk;
+        public byte[] handshake_hash;
+        public boolean failure_expected;
+        public boolean fallback_expected;
+        public TestMessage[] messages;
+
+        public void addMessage(TestMessage msg) {
+            TestMessage[] newMessages;
+            if (messages != null) {
+                newMessages = new TestMessage[messages.length + 1];
+                System.arraycopy(messages, 0, newMessages, 0, messages.length);
+                newMessages[messages.length] = msg;
+            } else {
+                newMessages = new TestMessage[1];
+                newMessages[0] = msg;
+            }
+            messages = newMessages;
+        }
+    }
+
+    private void assertSubArrayEquals(String msg, byte[] expected, byte[] actual) {
+        for (int index = 0; index < expected.length; ++index)
+            assertEquals(expected[index], actual[index], msg + "[" + index + "]");
+    }
 
 	/**
 	 * Runs a Noise test vector.
@@ -441,65 +437,77 @@ public class VectorTests {
 		}
 	}
 
-	/**
-	 * Processes a file from the command-line.
-	 * 
-	 * @param filename The name of the file to process.
-	 */
-	public void processFile(String filename)
-	{
-		total = 0;
-		skipped = 0;
-		failed = 0;
-		try {
-			try (FileInputStream fileStream = new FileInputStream(filename)) {
-				InputStreamReader streamReader = new InputStreamReader(fileStream);
-				BufferedReader bufferedReader = new BufferedReader(streamReader);
-				JsonReader reader = new JsonReader(bufferedReader);
-				try {
-					reader.beginObject();
-					while (reader.hasNext()) {
-						String name = reader.nextName();
-						if (name.equals("vectors")) {
-							reader.beginArray();
-							while (reader.hasNext() /*&& total < 50*/) {
-								reader.beginObject();
-								processVector(reader);
-								reader.endObject();
-							}
-							reader.endArray();
-						} else {
-							reader.skipValue();
-						}
-					}
-					reader.endObject();
-				} finally {
-					reader.close();
-				}
-			}
-		} catch (FileNotFoundException e) {
-			System.err.println(filename + ": File not found");
-		} catch (IOException e) {
-			System.err.println("Exception while parsing JSON: " + e.toString());
-			e.printStackTrace();
-		}
-		System.out.print(filename + ": ");
-		System.out.print(total);
-		System.out.print(" tests, ");
-		System.out.print(skipped);
-		System.out.print(" skipped, ");
-		System.out.print(failed);
-		System.out.println(" failed");
-	}
+    /**
+     * Processes a file from the command-line.
+     *
+     * @param filename The name of the file to process.
+     */
+    public void processFile(String filename) {
+        total = 0;
+        skipped = 0;
+        failed = 0;
+        try {
+            try (FileInputStream fileStream = new FileInputStream(filename)) {
+                processInputStream(fileStream);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println(filename + ": File not found");
+        } catch (IOException e) {
+            System.err.println("Exception while parsing JSON: " + e.toString());
+            e.printStackTrace();
+        }
+        System.out.print(filename + ": ");
+        System.out.print(total);
+        System.out.print(" tests, ");
+        System.out.print(skipped);
+        System.out.print(" skipped, ");
+        System.out.print(failed);
+        System.out.println(" failed");
+    }
 
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.out.println("Usage: VectorTests file1 file2 ...");
-			return;
-		}
-		VectorTests app = new VectorTests();
-		for (String filename : args)
-			app.processFile(filename);
-	}
-	
+    private void processInputStream(InputStream fileStream) throws IOException {
+        InputStreamReader streamReader = new InputStreamReader(fileStream);
+        BufferedReader bufferedReader = new BufferedReader(streamReader);
+        JsonReader reader = new JsonReader(bufferedReader);
+        try {
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals("vectors")) {
+                    reader.beginArray();
+                    while (reader.hasNext() /*&& total < 50*/) {
+                        reader.beginObject();
+                        processVector(reader);
+                        reader.endObject();
+                    }
+                    reader.endArray();
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+        } finally {
+            reader.close();
+        }
+    }
+
+    static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: VectorTests file1 file2 ...");
+            return;
+        }
+        VectorTests app = new VectorTests();
+        for (String filename : args)
+            app.processFile(filename);
+    }
+
+    @Test
+    void executeNoiseTestVectors() throws IOException {
+        String[] testCases = { "/basic.json", "/fallback.json", "/hybrid.json" };
+        for (String testCase : testCases) {
+            try (InputStream stream = getClass().getResourceAsStream(testCase)) {
+                processInputStream(stream);
+            }
+        }
+    }
 }
