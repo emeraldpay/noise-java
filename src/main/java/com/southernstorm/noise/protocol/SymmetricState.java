@@ -63,9 +63,8 @@ class SymmetricState implements Destroyable {
 		ck = new byte [hashLength];
 		h = new byte [hashLength];
 		prev_h = new byte [hashLength];
-		
-		byte[] protocolNameBytes;
-		protocolNameBytes = protocolName.getBytes(StandardCharsets.UTF_8);
+
+		byte[] protocolNameBytes = protocolName.getBytes(StandardCharsets.UTF_8);
 
 		if (protocolNameBytes.length <= hashLength) {
 			System.arraycopy(protocolNameBytes, 0, h, 0, protocolNameBytes.length);
