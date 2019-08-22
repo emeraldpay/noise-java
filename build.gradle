@@ -1,0 +1,11 @@
+plugins {
+    id "org.javamodularity.moduleplugin" version "1.5.0" apply false   // Support for the Java Platform module system.
+    id "io.freefair.javadoc-links" version "3.8.4" apply false         // Make JavaDocs link back to the main Java docs.
+    id "org.jetbrains.kotlin.jvm" version "1.3.41" apply false         // Kotlin language support.
+}
+
+group 'com.r3.noise'
+version '1.0'
+
+// Common build logic I carry around with me, configures the plugins above and commonly useful dependencies.
+apply from: "precanned.gradle"

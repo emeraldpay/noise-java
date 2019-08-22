@@ -1,0 +1,2 @@
+rootProject.name = "com.r3.noise"
+include "com.r3.noise.noisejava"

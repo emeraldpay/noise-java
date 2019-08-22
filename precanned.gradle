@@ -1,0 +1,82 @@
+// Precanned Gradle incantations to reduce boilerplate and (hopefully) KISS.
+//
+// Configures projects with lots of feature-rich defaults.
+//
+// All modules get:
+// - The Java library plugin, so you can distinguish between "api" and "implementation" dependencies.
+// - The Java modularity plugin applied, which won't do anything unless you write a module-info.java file
+//   but if you do, it makes it all work right if you're on Java 9+.
+// - JavaDocs get linked to their dependencies properly when possible.
+// - JUnit 5 properly configured. It can still run JUnit 4 tests though.
+//
+// Submodules with names that are suffixes of the root project name are "library modules". They get:
+//
+// - SLF4J so you can do logging without being tied to a logging engine.
+// - The Maven Publish plugin applied.
+//
+// The root module and other modules are for executables. They get:
+//
+// - TinyLog logging engine with SLF4J adapter, and a remapper for java.util.logging to SLF4J
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "org.javamodularity.moduleplugin"
+    apply plugin: "io.freefair.javadoc-links"
+
+    def isLibrarySubModule = name.startsWith(rootProject.name + ".")
+    def isKotlinModule = new File("$projectDir/src/main/kotlin").exists()
+
+    if (isLibrarySubModule) {
+        apply plugin: "java-library"
+        apply plugin: "maven-publish"
+        apply plugin: "io.freefair.javadoc-links"
+    }
+
+    if (isKotlinModule) {
+        apply plugin: "org.jetbrains.kotlin.jvm"
+    }
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+        // Kotlin standard library.
+        if (isKotlinModule) {
+            implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+            implementation "org.jetbrains.kotlin:kotlin-reflect"
+        }
+
+        if (!isKotlinModule) {
+            // JetBrains annotations for nullability support.
+            implementation "org.jetbrains:annotations:17.0.0"
+        }
+
+        // JUnit testing.
+        testCompile "org.junit.jupiter:junit-jupiter-api:5.2.0"
+        testCompile "org.junit.jupiter:junit-jupiter-params:5.2.0"
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:5.2.0"
+    }
+
+    if (isKotlinModule) {
+        compileKotlin {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        compileTestKotlin {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    def modLang = isKotlinModule ? "Kotlin" : "Java"
+    if (isLibrarySubModule) {
+        System.out.println("Configured $name as a $modLang library module")
+    } else {
+        System.out.println("Configured $name as a $modLang executable module")
+    }
+}
