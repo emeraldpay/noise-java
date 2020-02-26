@@ -114,7 +114,7 @@ bintray {
         userOrg = 'emerald'
         repo = 'noise-java'
         name = project.name
-        licenses = ['Apache-2.0']
+        licenses = ['MIT']
         vcsUrl = 'https://github.com/emeraldpay/noise-java.git'
         labels = ['noise', 'protocol', 'cryptography']
         publicDownloadNumbers = true
