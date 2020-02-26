@@ -8,8 +8,8 @@ other newer extensions.
 
 == Original Work
 
-This library is a fork of https://github.com/rweather/noise-java[Rhys Weatherley's Noise-Java library] and
-https://github.com/corda/noise-java[Mike Hearn], who modernized it to benefit from newer Java versions.
+This library is a fork of https://github.com/rweather/noise-java[Rhys Weatherley's Noise-Java library], and
+https://github.com/corda/noise-java[Mike Hearn's fork], who modernized it to benefit from newer Java versions.
 
 Differences from the https://github.com/rweather/noise-java[Rhys Weatherley's Noise-Java library] upstream project include:
 
@@ -26,7 +26,7 @@ Differences from the https://github.com/rweather/noise-java[Rhys Weatherley's No
 As a consequence of these changes, this version may be unsuitable for pre-Lollipop Android versions.
 The original might be better if you need to support those cases.
 
-The main difference from https://github.com/corda/noise-java[Mike Hearn] is that current fork is accessible
+The main difference from https://github.com/corda/noise-java[Mike Hearn's fork] is that current fork is accessible
 through a public repository on Bintray.
 
 == Usage
@@ -37,7 +37,7 @@ through a public repository on Bintray.
 ----
 repositories {
     jcenter()
-    maven { url  "https://dl.bintray.com/emerald/noise-java" }
+    maven { url "https://dl.bintray.com/emerald/noise-java" }
 }
 
 dependencies {
