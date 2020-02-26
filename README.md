@@ -1,5 +1,5 @@
-R3 Noise Protocol for Java
-==========================
+Noise Protocol for Java
+=======================
 
 This library is a fork of [Rhys Weatherley's Noise-Java library](https://github.com/rweather/noise-java), but
 modernised to benefit from newer Java versions. As such it offers the features in the base Noise spec. It doesn't

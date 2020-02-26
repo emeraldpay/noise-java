@@ -69,7 +69,7 @@ public interface DHState extends Destroyable {
 	void getPublicKey(byte[] key, int offset);
 
 	/**
-	 * Returns the public key bytes.
+	 * @return the public key bytes.
 	 */
 	default byte[] getPublicKey() {
 		byte[] result = new byte[getPublicKeyLength()];
@@ -97,7 +97,7 @@ public interface DHState extends Destroyable {
 	void getPrivateKey(byte[] key, int offset);
 
 	/**
-	 * Returns the private key bytes.
+	 * @return the private key bytes.
 	 */
 	default byte[] getPrivateKey() {
 		byte[] result = new byte[getPrivateKeyLength()];

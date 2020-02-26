@@ -5,8 +5,8 @@
  * where you don't need or want full TLS compatibility.
  */
 @SuppressWarnings({"module", "JavaModuleNaming"})
-module com.r3.noise.noisejava {
+module io.emeraldpay.noise {
     exports com.southernstorm.noise.protocol;
     // The c.s.n.crypto package is for internal use only.
-    requires org.jetbrains.annotations;
+//    requires org.jetbrains.annotations;
 }

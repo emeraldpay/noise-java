@@ -1,3 +1,0 @@
-apply plugin: "org.javamodularity.moduleplugin"
-
-// modularity.mixedJavaRelease(8)

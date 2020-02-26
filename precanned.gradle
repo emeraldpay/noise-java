@@ -51,7 +51,8 @@ allprojects {
 
         if (!isKotlinModule) {
             // JetBrains annotations for nullability support.
-            implementation "org.jetbrains:annotations:17.0.0"
+            // disabled because package is not available
+            // implementation "org.jetbrains:annotations:17.0.0"
         }
 
         // JUnit testing.
