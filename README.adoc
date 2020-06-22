@@ -14,12 +14,12 @@ https://github.com/corda/noise-java[Mike Hearn's fork], who modernized it to ben
 Differences from the https://github.com/rweather/noise-java[Rhys Weatherley's Noise-Java library] upstream project include:
 
 * Uses Gradle for the build and JavaDocs.
-* Fully modular when used on Java 9+ (has a module-info descriptor)
+* Fully modular (has a module-info descriptor)
 * Crypto fallbacks have been removed. This version can only use the JDK's native AES/GCM support. This is because
  for users on modern Java the native AES/GCM support is better: it's hardware accelerated using
  AES-NI, and removing emulations and fallback logic makes the library smaller and easier to
  review. The small size and easy auditability of Noise protocols is one of their primary benefits.
-* Updated to more modern Java language constructs (still targets Java 8 runtimes), and fixed various
+* Updated to more modern Java language constructs, and fixed various
  static analysis warnings. Fleshed out a few JavaDocs.
 * Added the test vectors from Noise-C and made them run by default as part of `gradle test`.
 
