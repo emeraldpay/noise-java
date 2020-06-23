@@ -20,7 +20,6 @@
 
 allprojects {
     apply plugin: "java"
-    apply plugin: "org.javamodularity.moduleplugin"
     apply plugin: "io.freefair.javadoc-links"
 
     def isLibrarySubModule = name.startsWith(rootProject.name + ".")
